@@ -10,7 +10,7 @@ object SearchProblems {
 	  * Tail-recursive breadth first search for a binary tree
 	  */
 	def bfsTreeSearch[T](tree: TreeNode[T], value: T): Option[T] = {
-		// Side-effects contained only in this function
+		// Side-effects contained only in this function scope
 		val queue: mutable.Queue[Option[TreeNode[T]]] = mutable.Queue[Option[TreeNode[T]]]()
 
 		/**
@@ -21,8 +21,8 @@ object SearchProblems {
 			case Some(node) =>
 				if (node.value.equals(value)) return Option(node.value)
 
-				queue.enqueue(node.left)
-				queue.enqueue(node.right)
+				queue += node.left
+				queue += node.right
 
 				search(queue.dequeue)
 			case None => if (queue.nonEmpty) search(queue.dequeue) else None
@@ -36,7 +36,7 @@ object SearchProblems {
       * Tail-recursive breadth first search for a graph
       */
     def bfsGraphSearch[T](graph: GraphNode[T], value: T): Option[T] = {
-        // Side-effects contained only in this function
+        // Side-effects contained only in this function scope
         val queue: mutable.Queue[Option[GraphNode[T]]] = mutable.Queue[Option[GraphNode[T]]]()
 
         /**
