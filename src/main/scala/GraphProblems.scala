@@ -16,20 +16,19 @@ object GraphProblems {
 		  * tail recursion
 		  */
 		@tailrec
-		def search(curNode: Option[Node[T]]): Option[Node[T]] = curNode match {
-			case Some(node) => {
-				if (node.value.equals(value)) return curNode
+		def search(curNode: Option[Node[T]]): Option[T] = curNode match {
+			case Some(node) =>
+				if (node.value.equals(value)) return Option(curNode.get.value)
 
 				queue.enqueue(node.left)
 				queue.enqueue(node.right)
 
 				search(queue.dequeue)
-			}
 			case None => if (queue.nonEmpty) search(queue.dequeue) else None
 			case _ => None
 		}
 
-		Option(search(Option(tree)).get.value)
+		Option(search(Option(tree))).flatten
 	}
 
 }
