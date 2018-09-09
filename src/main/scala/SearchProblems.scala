@@ -1,6 +1,6 @@
 import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.collection.immutable.{HashSet, List}
+import scala.collection.immutable.{HashSet, List, Queue}
 import scala.language.postfixOps
 
 case class TreeNode[T](value: T, left: Option[TreeNode[T]] = None, right: Option[TreeNode[T]] = None)
@@ -16,8 +16,8 @@ object SearchProblems {
       * @return Option with the node
       */
 	def bfsTreeSearch[T](tree: TreeNode[T], value: T): Option[TreeNode[T]] = {
-		// Side-effects contained only in this function scope
-		val queue: mutable.Queue[Option[TreeNode[T]]] = mutable.Queue[Option[TreeNode[T]]]()
+		// Side-effects contained only in this scope
+		var queue: Queue[Option[TreeNode[T]]] = Queue[Option[TreeNode[T]]]()
 
 		/**
 		  * Tail recursion search
@@ -27,11 +27,19 @@ object SearchProblems {
 			case Some(node) =>
 				if (node.value.equals(value)) return Option(node)
 
-				queue += node.left
-				queue += node.right
+				queue = queue.enqueue(node.left)
+				queue = queue.enqueue(node.right)
 
-				search(queue.dequeue)
-			case None => if (queue.nonEmpty) search(queue.dequeue) else None
+                val dequeue = queue.dequeue
+                queue = dequeue._2
+
+                search(dequeue._1)
+			case None => if (queue.nonEmpty) {
+                val dequeue = queue.dequeue
+                queue = dequeue._2
+
+                search(dequeue._1)
+            } else None
 			case _ => None
 		}
 
@@ -46,9 +54,9 @@ object SearchProblems {
       * @return Option with the node
       */
     def bfsGraphSearch[T](graph: GraphNode[T], value: T): Option[GraphNode[T]] = {
-        // Side-effects contained only in this function scope
-        val queue: mutable.Queue[Option[GraphNode[T]]] = mutable.Queue[Option[GraphNode[T]]]()
-        val visited: mutable.HashSet[T] = mutable.HashSet[T]()
+        // Side-effects contained only in this scope
+        var queue: Queue[Option[GraphNode[T]]] = Queue[Option[GraphNode[T]]]()
+        var visited: HashSet[T] = HashSet[T]()
 
         /**
           * Tail recursion search
@@ -59,13 +67,22 @@ object SearchProblems {
                 if (node.value.equals(value)) return Option(node)
 
                 if (!visited.contains(node.value) && node.edges.isDefined)
-                    node.edges.get.foreach(edge => queue += edge)
+                    node.edges.get.foreach(edge => queue = queue.enqueue(edge))
 
                 if (queue.isEmpty) None else {
                     visited += node.value
-                    search(queue.dequeue)
+
+                    val dequeue = queue.dequeue
+                    queue = dequeue._2
+
+                    search(dequeue._1)
                 }
-            case None => if (queue.nonEmpty) search(queue.dequeue) else None
+            case None => if (queue.nonEmpty) {
+                val dequeue = queue.dequeue
+                queue = dequeue._2
+
+                search(dequeue._1)
+            } else None
             case _ => None
         }
 
@@ -80,6 +97,7 @@ object SearchProblems {
       * @return Option with the node
       */
     def dfsTreeSearch[T](tree: TreeNode[T], value: T): Option[TreeNode[T]] = {
+        // Side-effects contained only in this scope
         var stack: List[Option[TreeNode[T]]] = List[Option[TreeNode[T]]]()
 
         /**
@@ -117,7 +135,7 @@ object SearchProblems {
       * @return Option with the node
       */
     def dfsGraphSearch[T](graph: GraphNode[T], value: T): Option[GraphNode[T]] = {
-        // Side-effects contained only in this function scope
+        // Side-effects contained only in this scope
         var stack: List[Option[GraphNode[T]]] = List[Option[GraphNode[T]]]()
         var visited: HashSet[T] = HashSet[T]()
 
