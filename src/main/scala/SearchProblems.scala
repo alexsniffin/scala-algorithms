@@ -1,5 +1,4 @@
 import scala.annotation.tailrec
-import scala.collection.mutable
 import scala.collection.immutable.{HashSet, List, Queue}
 import scala.language.postfixOps
 
