@@ -1,7 +1,7 @@
 import org.scalatest._
 import org.scalamock.scalatest.MockFactory
 
-class SearchProblemsSpec extends FlatSpec  with MockFactory with GivenWhenThen {
+class SearchProblemsSpec extends FlatSpec with MockFactory with GivenWhenThen {
     info("Running GraphSpec")
 
     "BFS for trees" should "find the given value" in {
