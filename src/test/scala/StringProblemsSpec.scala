@@ -27,4 +27,16 @@ class StringProblemsSpec extends FlatSpec with MockFactory with GivenWhenThen {
 		Then("the result should be 5")
 		assert(result.get == 5)
 	}
+
+	"LCS" should "return the longest substring with two different sized strings" in {
+		Given("two strings with multiple common sub strings")
+		val str1 = "AAB"
+		val str2 = "BAABAA"
+
+		When("comparing the two strings for the longest common substring")
+		val result = StringProblems.LcSubStr(str1, str2)
+
+		Then("the result should be 3")
+		assert(result.get == 3)
+	}
 }
