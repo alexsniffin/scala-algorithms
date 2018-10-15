@@ -2,7 +2,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, GivenWhenThen}
 
 class StringProblemsSpec extends FlatSpec with MockFactory with GivenWhenThen {
-    info("Running GraphSpec")
+    info("Running StringProblemsSpec")
 
     "LCS" should "return the longest substring" in {
         Given("two strings")
